@@ -2,13 +2,19 @@ import styled from 'styled-components';
 
 
 export const Wrapper = styled.div`
-  margin: 60px 50px;
+  margin: 60px 10px;
   h1 {
     font-weight: 400;
   }
   p {
     font-size: 2em;
     font-weight: 400;
+  }
+  @media only screen and (max-width: 768px){
+    margin: 20px 10px;
+    h1, p {
+      font-size: 1.5em;
+    }
   }
 `;
 
@@ -24,6 +30,11 @@ export const SecondLine = styled.div`
   p {
     font-size: 1.3em;
   }
+  @media only screen and (max-width: 768px){ 
+    p {
+      font-size:  1.1em;
+    }
+  }
 `;
 
 export const ThirdLine = styled.div`
@@ -31,6 +42,11 @@ export const ThirdLine = styled.div`
   p {
     font-size: 1.7em;
     font-weight: 400;
+  }
+  @media only screen and (max-width: 768px){
+    p {
+      font-size:  1.1em;
+    }
   }
 `
 
@@ -43,6 +59,11 @@ export const FourthLine = styled.div`
 
 export const GrayText = styled.p`
   color: #ccc;
+  @media only screen and (max-width: 768px){
+    span {
+      display: block;
+    }
+  }
 `;
 export const GreenText = styled.p`
   color: #4fcf80;
