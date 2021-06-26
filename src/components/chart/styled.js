@@ -2,7 +2,15 @@ import styled from 'styled-components';
 
 
 export const Wrapper = styled.div`
-
+  .MuiFormControl-root {
+    width: 100px;
+  }
+  @media only screen and (max-width: 768px) {
+    .MuiFormControl-root {
+      width: 100px;
+      margin-left: 50px;
+    }
+  }
 `
 export const Items = styled.div`
   display: inline-block;
@@ -22,3 +30,10 @@ export const Items = styled.div`
     font-size: 15px;
   }
 `
+
+export const WrapDates = styled.div``;
+
+export const WrapActionButtons = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;

@@ -6,7 +6,7 @@ const CompanyData = () => {
 
   const getCompanyData = useCallback(async () => {
       try {
-        await fetch(`https://cloud.iexapis.com/stable/stock/aapl/quote?token=pk_0762e40aebbb4ea2b77f119e43f4fce2`)
+        await fetch(`https://cloud.iexapis.com/stable/stock/aapl/quote?token=pk_42c7191727b1499db98534a371da3831`)
           .then(res => res.json())
           .then(data => {
             setCompanyData(data)

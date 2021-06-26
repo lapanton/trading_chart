@@ -28,6 +28,9 @@ const GlobalStyle = createGlobalStyle`
     ul li div:last-child {
       font-weight: 400;
     }
+    .MuiPaper-root {
+      background-color: red;
+    }
   }
 `
 

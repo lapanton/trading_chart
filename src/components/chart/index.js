@@ -1,54 +1,69 @@
 import React, { useEffect, useState, useCallback } from "react";
 import HighchartsReact from "highcharts-react-official";
 import ControlButtons from "./ControlButtons";
+import DateChoice from "./DateChoice";
+import {WrapActionButtons} from "./styled";
 
 const Chart = () => {
+  const [chartDataDefault, setChartDataDefault] = useState();
   const [chartData, setChartData] = useState();
-  const [closeData, setCloseData] = useState();
-  const [axisLabel, setAxisLabel] = useState();
-  const [volumeData, setVolumeData] = useState();
+  const [updateMinDate, setUpdateMinDate] = useState();
+  const [updateMaxDate, setUpdateMaxDate] = useState();
 
 
-  const getChartData = useCallback(async () => {
+  const getChartData = useCallback(async (updateMinDate, updateMaxDate) => {
     try {
-      await fetch(`https://cloud.iexapis.com/stable/stock/aapl/chart/1m?token=pk_0762e40aebbb4ea2b77f119e43f4fce2`)
+      await fetch(`https://cloud.iexapis.com/stable/stock/aapl/chart/1m?token=pk_42c7191727b1499db98534a371da3831`)
         .then(res => res.json())
         .then(response => {
+          setChartDataDefault(response)
           setChartData(response);
-          const closeValue = response.map(a => a.close);
-          const aXisValue = response.map(a => new Date(a.label).toLocaleDateString());
-          const volumeValue = response.map(a => a.volume);
-
-          setCloseData(closeValue);
-          setAxisLabel(aXisValue);
-          setVolumeData(volumeValue);
         });
     } catch (e) {}
   }, []);
 
   useEffect(()=> {
-    getChartData()
+    getChartData(updateMinDate, updateMaxDate)
   }, [getChartData]);
+
+  useEffect(() => {
+    if (updateMinDate !== undefined && updateMaxDate !== undefined) {
+      const range = chartDataDefault.filter((item) => {
+        return updateMinDate.format("YYYY-MM-DD") <= item.date && item.date <= updateMaxDate.format("YYYY-MM-DD")
+      });
+      setChartData(range);
+    }
+  }, [updateMinDate, updateMaxDate])
 
   return (
     <>
-      { closeData !== undefined && volumeData !== undefined &&
+      { chartData !== undefined &&
         <>
-          <ControlButtons />
+          <WrapActionButtons>
+            <ControlButtons />
+            <DateChoice
+              minDate={chartDataDefault[0].date}
+              maxDate={chartDataDefault[chartDataDefault.length - 1].date}
+              setUpdateMinDate={setUpdateMinDate}
+              setUpdateMaxDate={setUpdateMaxDate}
+              updateMinDate={updateMinDate}
+              updateMaxDate={updateMaxDate}
+            />
+          </WrapActionButtons>
           <HighchartsReact options={{
             title: null,
             series: [
                 {
                   name: 'Close value',
                   showInLegend: false,
-                  data: closeData,
+                  data: chartData.map(a => a.close),
                   yAxis: 0
                 },
                 {
                   name: 'Volume',
                   showInLegend: false,
                   type: 'column',
-                  data: volumeData,
+                  data: chartData.map(a => a.volume),
                   yAxis: 1,
                 }
               ],
@@ -95,7 +110,7 @@ const Chart = () => {
           useHTML: true
         },
             xAxis: {
-              categories: axisLabel,
+              categories: chartData.map(a => new Date(a.label).toLocaleDateString()),
               crosshair: {
                 width: '1',
                 color: '#ccc',
@@ -108,8 +123,8 @@ const Chart = () => {
                   enabled: false
                 },
                 opposite: true,
-                min: Math.min(...closeData),
-                max: Math.max(...closeData),
+                min: Math.min(...chartData.map(a => a.close)),
+                max: Math.max(...chartData.map(a => a.close)),
                 height: '80%',
                 crosshair: {
                   width: '1',
@@ -120,7 +135,7 @@ const Chart = () => {
               {
                 visible: false,
                 min: 0,
-                max: Math.max(...volumeData),
+                max: Math.max(...chartData.map(a => a.volume)),
                 height: '20%',
                 top: '80%',
               }
