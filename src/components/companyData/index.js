@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Wrapper, FirstLine, SecondLine, GreenText, GrayText, ThirdLine, FourthLine } from "./styled";
 
 const CompanyData = () => {
