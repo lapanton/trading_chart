@@ -4,22 +4,29 @@ import { Wrapper, FirstLine, SecondLine, GreenText, GrayText, ThirdLine, FourthL
 const CompanyData = () => {
   const [companyData, setCompanyData] = useState();
 
-  const getCompanyData = useCallback(async () => {
+  const getCompanyData = async () => {
       try {
-        await fetch(`https://cloud.iexapis.com/stable/stock/aapl/quote?token=pk_42c7191727b1499db98534a371da3831`)
+        // I know this is not secure
+        await fetch(`https://cloud.iexapis.com/stable/stock/aapl/quote?token=pk_e19d209808964780b0406c1806cd1d37`)
           .then(res => res.json())
           .then(data => {
             setCompanyData(data)
           });
-      } catch (e) {}
-    }, []);
+      } catch (e) {
+        alert('Something goes wrong with load');
+      }
+    };
 
     useEffect(() => {
       getCompanyData();
-      setInterval(() => {
+      const intervalId = setInterval(() => {
         getCompanyData();
-      }, 3000)
-    }, [getCompanyData]);
+      }, 30000);
+      return () => {
+
+        clearInterval(intervalId);
+      }
+    }, []);
 
   return (
     <>

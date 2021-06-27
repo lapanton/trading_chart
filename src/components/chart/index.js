@@ -11,15 +11,18 @@ const Chart = () => {
   const [updateMaxDate, setUpdateMaxDate] = useState();
 
 
-  const getChartData = useCallback(async (updateMinDate, updateMaxDate) => {
+  const getChartData = useCallback(async () => {
     try {
-      await fetch(`https://cloud.iexapis.com/stable/stock/aapl/chart/1m?token=pk_42c7191727b1499db98534a371da3831`)
+      // I know this is not secure
+      await fetch(`https://cloud.iexapis.com/stable/stock/aapl/chart/1m?token=pk_e19d209808964780b0406c1806cd1d37`)
         .then(res => res.json())
         .then(response => {
           setChartDataDefault(response)
           setChartData(response);
         });
-    } catch (e) {}
+    } catch (e) {
+
+    }
   }, []);
 
   useEffect(()=> {
